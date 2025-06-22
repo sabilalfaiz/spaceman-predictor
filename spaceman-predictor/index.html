@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spaceman Predictor</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Spaceman Predictor</h1>
+
+        <label for="mode">Select Mode:</label>
+        <select id="mode">
+            <option value="rng">RNG Mode</option>
+            <option value="fibonacci">Fibonacci Mode</option>
+            <option value="average">Average Mode</option>
+            <option value="smart">Smart Mode (AI)</option>
+        </select>
+
+        <input
+            type="number"
+            id="lastInput"
+            step="0.01"
+            min="1"
+            placeholder="Masukkan prediksi sebelumnya"
+        />
+
+        <button id="predictBtn">Predict Next</button>
+        <div id="loading" style="display:none;">Loading...</div>
+        <div id="result"></div>
+
+        <div class="history-container" style="display:none;">
+            <h2>Prediction History</h2>
+            <ul id="historyList"></ul>
+            <button id="clearHistory">Clear History</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
