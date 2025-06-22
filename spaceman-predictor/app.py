@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, send_from_directory, request
 import random
+import os
 
 app = Flask(__name__, static_folder='.')
 
 history = [1.0, 1.5]
-MAX_HISTORY = 10
 
 @app.route('/')
 def index():
@@ -19,19 +19,17 @@ def predict(mode):
     last_input = request.args.get('last', type=float)
 
     if last_input is not None:
-        history.append(last_input)
-        if len(history) > MAX_HISTORY:
-            history.pop(0)
+        if len(history) < 2:
+            history.append(last_input)
+        else:
+            history.append(last_input)
 
     if mode == 'rng':
         chance = random.random()
         prediction = round(random.uniform(1.0, 3.0), 2) if chance <= 0.8 else round(random.uniform(3.1, 50.0), 2)
 
     elif mode == 'fibonacci':
-        if len(history) >= 2:
-            prediction = round(history[-1] + history[-2], 2)
-        else:
-            prediction = round(random.uniform(1.0, 3.0), 2)
+        prediction = round(history[-1] + history[-2], 2)
 
     elif mode == 'average':
         data = history[-3:] if len(history) >= 3 else history
@@ -50,10 +48,12 @@ def predict(mode):
         prediction = round(random.uniform(1.0, 3.0), 2)
 
     history.append(prediction)
-    if len(history) > MAX_HISTORY:
-        history.pop(0)
-
     return jsonify({'prediction': prediction})
 
+@app.route('/history')
+def get_history():
+    return jsonify({'history': history})
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
